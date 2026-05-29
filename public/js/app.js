@@ -122,7 +122,7 @@ async function pollStatus() {
     const data = await res.json();
 
     updateProgress(data.progress, data.stage);
-    updateAgentStates(data.progress, data.stage);
+    updateAgentStates(data.progress);
 
     if (data.status === 'complete') {
       clearInterval(pollInterval);
@@ -154,22 +154,22 @@ function resetAgentStates() {
   agentStages.forEach(a => {
     const el = document.getElementById(a.id);
     el.classList.remove('active', 'done');
-    el.querySelector('.agent-status').textContent = '◯';
+    el.querySelector('.agent-status').textContent = 'Queued';
   });
 }
 
-function updateAgentStates(progress, stage) {
+function updateAgentStates(progress) {
   agentStages.forEach((a, i) => {
     const el = document.getElementById(a.id);
     const nextThreshold = agentStages[i + 1]?.threshold ?? 100;
     if (progress >= nextThreshold) {
       el.classList.remove('active');
       el.classList.add('done');
-      el.querySelector('.agent-status').textContent = '●';
+      el.querySelector('.agent-status').textContent = 'Complete';
     } else if (progress >= a.threshold) {
       el.classList.add('active');
       el.classList.remove('done');
-      el.querySelector('.agent-status').textContent = '◆';
+      el.querySelector('.agent-status').textContent = 'Running';
     }
   });
 }
