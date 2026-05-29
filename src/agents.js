@@ -1,4 +1,5 @@
 const Anthropic = require('@anthropic-ai/sdk');
+const { getKnowledge } = require('./knowledge_base');
 
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -14,6 +15,9 @@ const ANALYSIS_TYPES = {
   fundraising: 'Fundraising Strategy Review',
 };
 
+let _totalInputTokens = 0;
+let _totalOutputTokens = 0;
+
 async function callAgent(systemPrompt, userPrompt, maxTokens = 1000) {
   const response = await client.messages.create({
     model: MODEL,
@@ -21,12 +25,31 @@ async function callAgent(systemPrompt, userPrompt, maxTokens = 1000) {
     system: systemPrompt,
     messages: [{ role: 'user', content: userPrompt }],
   });
+  _totalInputTokens += response.usage?.input_tokens || 0;
+  _totalOutputTokens += response.usage?.output_tokens || 0;
   return response.content[0].text;
+}
+
+function getTokenUsage() {
+  return {
+    inputTokens: _totalInputTokens,
+    outputTokens: _totalOutputTokens,
+    // claude-sonnet-4: $3/MTok input, $15/MTok output
+    estimatedCostUSD: ((_totalInputTokens / 1e6) * 3 + (_totalOutputTokens / 1e6) * 15).toFixed(4),
+  };
+}
+
+function resetTokenUsage() {
+  _totalInputTokens = 0;
+  _totalOutputTokens = 0;
 }
 
 // AGENT 1: Logic Mapper
 async function runLogicMapper(docText, analysisType) {
   const system = `You are a strategic logic analyzer. Your job is to map the underlying reasoning structure of business documents with precision and depth. You identify explicit claims, implicit assumptions, dependencies, and structural weaknesses.
+
+Use the following reference knowledge to guide your analysis:
+${getKnowledge('logicMapper')}
 
 Respond ONLY with valid JSON. No markdown, no explanation outside JSON.`;
 
@@ -44,7 +67,7 @@ Return JSON with exactly this structure:
   "structuralWeaknesses": ["weakness 1", "weakness 2", "weakness 3"]
 }`;
 
-  const raw = await callAgent(system, user, 800);
+  const raw = await callAgent(system, user, 1200);
   try {
     const clean = raw.replace(/```json|```/g, '').trim();
     return JSON.parse(clean);
@@ -62,6 +85,9 @@ Return JSON with exactly this structure:
 // AGENT 2: Bull Advocate
 async function runBullAdvocate(docText, logicMap, analysisType) {
   const system = `You are a brilliant, optimistic strategic analyst. Your job is to make the strongest possible case for a strategy — to steelman it completely. You find every reason it could work, every tailwind, every underappreciated strength. Be specific, cite real market dynamics, and be genuinely persuasive.
+
+Use the following benchmarks and frameworks to ground your bull case in reality:
+${getKnowledge('bullAdvocate')}
 
 Write in sharp, confident prose. No hedging. Make the reader believe.`;
 
@@ -83,12 +109,15 @@ Write 4-5 sharp paragraphs covering:
 
 Be specific. Reference details from the document. Make a genuine case.`;
 
-  return await callAgent(system, user, 900);
+  return await callAgent(system, user, 1400);
 }
 
 // AGENT 3: Bear Advocate
 async function runBearAdvocate(docText, logicMap, analysisType) {
   const system = `You are a ruthless, precise strategic skeptic. Your job is to find every way a strategy fails — the hidden risks, broken assumptions, execution traps, and market dynamics that destroy it. You are not a pessimist; you are a realist who has seen many strategies collapse.
+
+Use the following failure pattern library and benchmarks to ground your analysis:
+${getKnowledge('bearAdvocate')}
 
 Write in incisive, direct prose. Be specific. Name the failure modes with precision.`;
 
@@ -111,12 +140,15 @@ Write 4-5 sharp paragraphs covering:
 
 Be specific. Reference details from the document. Do not be generic.`;
 
-  return await callAgent(system, user, 900);
+  return await callAgent(system, user, 1400);
 }
 
 // AGENT 4: Blind Spot Detector
 async function runBlindSpotDetector(docText, logicMap) {
   const system = `You are an organizational psychologist and strategic advisor who specializes in identifying collective blind spots — the assumptions organizations protect from scrutiny because challenging them would be too uncomfortable. You understand cognitive biases, groupthink, and the sociology of decision-making.
+
+Use the following frameworks to identify the deepest blind spot:
+${getKnowledge('blindSpotDetector')}
 
 Be specific and courageous. Name the thing they cannot see.`;
 
@@ -135,14 +167,17 @@ Your response should have three parts:
 
 Be direct. Be specific. This is the most important part of the analysis.`;
 
-  return await callAgent(system, user, 600);
+  return await callAgent(system, user, 900);
 }
 
 // AGENT 5: Question Generator
 async function runQuestionGenerator(docText, logicMap, bullCase, bearCase, blindSpot) {
-  const system = `You are a Socratic strategist. You generate the questions that nobody in the room is asking — the questions that cut through consensus, challenge core assumptions, and could fundamentally change the direction of a strategy. 
+  const system = `You are a Socratic strategist. You generate the questions that nobody in the room is asking — the questions that cut through consensus, challenge core assumptions, and could fundamentally change the direction of a strategy.
 
 Your questions are specific, uncomfortable, and important. They are not rhetorical. They demand real answers.
+
+Use the following framework to ensure questions are maximally penetrating:
+${getKnowledge('questionGenerator')}
 
 Respond ONLY with valid JSON.`;
 
@@ -238,4 +273,4 @@ async function analyzeDocument(docText, analysisType, clientName, progressCallba
   };
 }
 
-module.exports = { analyzeDocument };
+module.exports = { analyzeDocument, getTokenUsage, resetTokenUsage };

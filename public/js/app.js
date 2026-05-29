@@ -270,7 +270,11 @@ function renderQuestions(questions) {
 
 // ── PRINT/EXPORT ──
 function printReport() {
-  window.print();
+  if (currentJobId) {
+    window.open('/api/report/' + currentJobId + '/export', '_blank');
+  } else {
+    window.print();
+  }
 }
 
 // ── STATE HELPERS ──
