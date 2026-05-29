@@ -57,6 +57,11 @@ const upload = multer({
 
 const jobs = new Map();
 
+app.get('/api/ping', (req, res) => {
+  const key = process.env.ANTHROPIC_API_KEY;
+  res.json({ ok: true, apiKey: key ? `SET (len=${key.length})` : 'MISSING' });
+});
+
 app.post('/api/analyze', upload.single('document'), async (req, res) => {
   try {
     const keyAtRequest = process.env.ANTHROPIC_API_KEY;
