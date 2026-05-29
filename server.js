@@ -82,8 +82,8 @@ app.post('/api/analyze', upload.single('document'), async (req, res) => {
       return res.status(400).json({ error: 'No document or text provided.' });
     }
 
-    if (!rawText || rawText.trim().length < 100) {
-      return res.status(400).json({ error: 'Document too short or could not be read.' });
+    if (!rawText || rawText.trim().length < 10) {
+      return res.status(400).json({ error: 'Document is empty or could not be read.' });
     }
 
     const jobId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
