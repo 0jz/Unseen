@@ -1,4 +1,5 @@
-const dotenvResult = require('dotenv').config({ override: true });
+const path = require('path');
+const dotenvResult = require('dotenv').config({ path: path.join(__dirname, '.env'), override: true });
 
 // Startup diagnostics — always printed when server starts
 console.log('─────────────────────────────────────────');
@@ -12,7 +13,6 @@ console.log('──────────────────────�
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
-const path = require('path');
 const fs = require('fs');
 const { analyzeDocument } = require('./src/agents');
 const { extractText } = require('./src/extractor');
