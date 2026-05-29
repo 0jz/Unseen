@@ -303,9 +303,7 @@ async function runAnalysis(jobId, text, analysisType, clientName) {
 
   try {
     const job = jobs.get(jobId);
-    if (!job) {
-      return;
-    }
+    if (!job) return;
 
     job.status = 'running';
     const result = await analyzeDocument(text, analysisType, clientName, update);
@@ -314,13 +312,15 @@ async function runAnalysis(jobId, text, analysisType, clientName) {
     job.stage = 'Complete';
     job.result = result;
   } catch (err) {
-    console.error('Analysis error:', err);
+    console.error('[UNSEEN] Analysis error:', err.status, err.message);
     const job = jobs.get(jobId);
-    if (!job) {
-      return;
-    }
+    if (!job) return;
     job.status = 'error';
-    job.error = err.message;
+    // Surface Anthropic API errors clearly (wrong key, model, quota, etc.)
+    if (err.status === 401) job.error = 'Invalid API key. Check your .env file.';
+    else if (err.status === 404) job.error = 'Model not found. Check model name in agents.js.';
+    else if (err.status === 429) job.error = 'Rate limit or quota exceeded.';
+    else job.error = err.message || 'Unknown error during analysis.';
   }
 }
 
