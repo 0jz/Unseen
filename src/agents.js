@@ -18,15 +18,22 @@ const ANALYSIS_TYPES = {
 
 // Per-job token tracking (passed by reference into callAgent)
 async function callAgent(systemPrompt, userPrompt, maxTokens, usage) {
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: maxTokens || 1000,
-    system: systemPrompt,
-    messages: [{ role: 'user', content: userPrompt }],
-  });
-  usage.inputTokens += response.usage?.input_tokens || 0;
-  usage.outputTokens += response.usage?.output_tokens || 0;
-  return response.content[0].text;
+  console.log(`[AGENT] Calling model: ${MODEL}`);
+  try {
+    const response = await client.messages.create({
+      model: MODEL,
+      max_tokens: maxTokens || 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+    });
+    usage.inputTokens += response.usage?.input_tokens || 0;
+    usage.outputTokens += response.usage?.output_tokens || 0;
+    console.log(`[AGENT] OK — tokens in=${response.usage?.input_tokens} out=${response.usage?.output_tokens}`);
+    return response.content[0].text;
+  } catch (err) {
+    console.error(`[AGENT] ✗ API error: status=${err.status} message=${err.message}`);
+    throw err;
+  }
 }
 
 // Splits long documents into beginning + end so agents see full scope

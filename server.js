@@ -60,8 +60,12 @@ const jobs = new Map();
 app.post('/api/analyze', upload.single('document'), async (req, res) => {
   try {
     const keyAtRequest = process.env.ANTHROPIC_API_KEY;
-    console.log('[REQUEST] API key at request time:', keyAtRequest ? `SET length=${keyAtRequest.length}` : 'MISSING');
+    console.log('[ANALYZE] Request received');
+    console.log('[ANALYZE] API key:', keyAtRequest ? `SET (${keyAtRequest.substring(0,12)}... len=${keyAtRequest.length})` : 'MISSING ✗');
+    console.log('[ANALYZE] Body keys:', Object.keys(req.body));
+    console.log('[ANALYZE] File:', req.file ? req.file.originalname : 'none');
     if (!keyAtRequest) {
+      console.log('[ANALYZE] ✗ Rejecting — no API key');
       return res.status(500).json({ error: 'Missing ANTHROPIC_API_KEY in .env.' });
     }
 
