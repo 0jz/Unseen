@@ -82,7 +82,7 @@ app.post('/api/analyze', upload.single('document'), async (req, res) => {
       return res.status(400).json({ error: 'No document or text provided.' });
     }
 
-    if (!rawText || rawText.trim().length < 10) {
+    if (!rawText || !rawText.trim()) {
       return res.status(400).json({ error: 'Document is empty or could not be read.' });
     }
 

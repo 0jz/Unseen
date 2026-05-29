@@ -84,8 +84,8 @@ async function startAnalysis() {
   if (activeTab === 'upload' && !currentFile) {
     showError('Please upload a document first.'); return;
   }
-  if (activeTab === 'paste' && pastedText.length < 100) {
-    showError('Please paste at least 100 characters of text.'); return;
+  if (activeTab === 'paste' && pastedText.length === 0) {
+    showError('Please paste some text first.'); return;
   }
 
   // Build form data
