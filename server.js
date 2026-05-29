@@ -1,4 +1,14 @@
-require('dotenv').config({ override: true });
+const dotenvResult = require('dotenv').config({ override: true });
+
+// Startup diagnostics — always printed when server starts
+console.log('─────────────────────────────────────────');
+console.log('[UNSEEN] Startup diagnostics');
+console.log('[UNSEEN] CWD:', process.cwd());
+console.log('[UNSEEN] .env load:', dotenvResult.error ? 'FAILED — ' + dotenvResult.error.message : 'OK');
+const _key = process.env.ANTHROPIC_API_KEY;
+console.log('[UNSEEN] API key:', _key ? `SET (${_key.substring(0,12)}... length ${_key.length})` : 'MISSING ✗');
+console.log('─────────────────────────────────────────');
+
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
@@ -15,8 +25,12 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-app.use(cors({ origin: `http://localhost:${process.env.PORT || 3000}` }));
+app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('[HTTP]', req.method, req.url);
+  next();
+});
 app.use(express.static('public'));
 
 const storage = multer.diskStorage({
@@ -45,7 +59,9 @@ const jobs = new Map();
 
 app.post('/api/analyze', upload.single('document'), async (req, res) => {
   try {
-    if (!process.env.ANTHROPIC_API_KEY) {
+    const keyAtRequest = process.env.ANTHROPIC_API_KEY;
+    console.log('[REQUEST] API key at request time:', keyAtRequest ? `SET length=${keyAtRequest.length}` : 'MISSING');
+    if (!keyAtRequest) {
       return res.status(500).json({ error: 'Missing ANTHROPIC_API_KEY in .env.' });
     }
 
