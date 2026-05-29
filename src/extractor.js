@@ -9,8 +9,7 @@ async function extractText(filePath, originalName) {
   }
 
   if (ext === '.pdf') {
-    const pdfParseModule = require('pdf-parse');
-    const pdfParse = pdfParseModule.default || pdfParseModule;
+    const pdfParse = require('pdf-parse');
     const buffer = fs.readFileSync(filePath);
     const data = await pdfParse(buffer);
     return data.text;
