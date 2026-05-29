@@ -190,17 +190,17 @@ function renderReport(report) {
     new Date(report.meta.generatedAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
 
   // Executive Summary
-  document.getElementById('execSummary').textContent = report.executiveSummary;
+  document.getElementById('execSummary').innerHTML = textToHtml(report.executiveSummary);
 
   // Logic Map
   renderLogicMap(report.logicMap);
 
   // Bull / Bear
-  document.getElementById('bullCase').textContent = report.bullCase;
-  document.getElementById('bearCase').textContent = report.bearCase;
+  document.getElementById('bullCase').innerHTML = textToHtml(report.bullCase);
+  document.getElementById('bearCase').innerHTML = textToHtml(report.bearCase);
 
   // Blind Spot
-  document.getElementById('blindSpot').textContent = report.blindSpot;
+  document.getElementById('blindSpot').innerHTML = textToHtml(report.blindSpot);
 
   // Questions
   renderQuestions(report.questions);
@@ -270,11 +270,13 @@ function renderQuestions(questions) {
 
 // ── PRINT/EXPORT ──
 function printReport() {
-  if (currentJobId) {
-    window.open('/api/report/' + currentJobId + '/export', '_blank');
-  } else {
-    window.print();
-  }
+  if (!currentJobId) { window.print(); return; }
+  const btn = document.querySelector('.report-actions .btn-primary');
+  const orig = btn.textContent;
+  btn.textContent = 'Opening...';
+  btn.disabled = true;
+  window.open('/api/report/' + currentJobId + '/export', '_blank');
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 1500);
 }
 
 // ── STATE HELPERS ──
@@ -308,5 +310,17 @@ function escapeHtml(str) {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Converts plain text with double-newline paragraphs into safe HTML
+function textToHtml(str) {
+  if (!str) return '';
+  return str
+    .split(/\n\n+/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p>${escapeHtml(p.replace(/\n/g, ' '))}</p>`)
+    .join('');
 }

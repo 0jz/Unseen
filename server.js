@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const { analyzeDocument, getTokenUsage, resetTokenUsage } = require('./src/agents');
+const { analyzeDocument } = require('./src/agents');
 const { extractText } = require('./src/extractor');
 
 const app = express();
@@ -15,7 +15,7 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-app.use(cors());
+app.use(cors({ origin: `http://localhost:${process.env.PORT || 3000}` }));
 app.use(express.json());
 app.use(express.static('public'));
 
@@ -53,12 +53,13 @@ app.post('/api/analyze', upload.single('document'), async (req, res) => {
     let rawText = '';
 
     if (req.file) {
-      rawText = await extractText(req.file.path, req.file.originalname);
-      setTimeout(() => {
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch {}
-      }, 24 * 60 * 60 * 1000);
+      try {
+        rawText = await extractText(req.file.path, req.file.originalname);
+      } catch (extractErr) {
+        fs.unlink(req.file.path, () => {});
+        return res.status(400).json({ error: 'Could not read file: ' + extractErr.message });
+      }
+      setTimeout(() => fs.unlink(req.file.path, () => {}), 24 * 60 * 60 * 1000);
     } else if (pastedText) {
       rawText = pastedText;
     } else {
@@ -291,14 +292,11 @@ async function runAnalysis(jobId, text, analysisType, clientName) {
     }
 
     job.status = 'running';
-    resetTokenUsage();
     const result = await analyzeDocument(text, analysisType, clientName, update);
     job.status = 'complete';
     job.progress = 100;
     job.stage = 'Complete';
     job.result = result;
-    job.usage = getTokenUsage();
-    console.log(`[UNSEEN] Analysis complete — tokens: ${job.usage.inputTokens} in / ${job.usage.outputTokens} out — est. cost: $${job.usage.estimatedCostUSD}`);
   } catch (err) {
     console.error('Analysis error:', err);
     const job = jobs.get(jobId);

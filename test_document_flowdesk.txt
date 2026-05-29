@@ -1,0 +1,68 @@
+FLOWDESK — FUNDRAISING STRATEGY REVIEW
+Series A — $4M Target — Q3 2026
+
+COMPANY OVERVIEW
+
+FlowDesk is a B2B SaaS platform that automates customer support for e-commerce SMBs using AI agents. Founded in March 2024 by two ex-Shopify engineers, the product handles returns, order tracking, and complaint resolution without human intervention. We resolve 73% of tickets autonomously. The remaining 27% are escalated to human agents with full context.
+
+Current team: 6 people (2 founders, 2 engineers, 1 growth, 1 customer success).
+
+TRACTION
+
+- 114 paying customers (all e-commerce, $500-$5,000 GMV/month range)
+- MRR: $47,000 (up from $8,000 six months ago)
+- Average contract value: $412/month
+- Churn: 4.2% monthly (we believe this is high but acceptable at this stage)
+- NPS: 61
+- CAC: $380 (primarily outbound sales + LinkedIn)
+- LTV at current churn: $9,800
+- Payback period: 11 months
+
+PRODUCT
+
+FlowDesk integrates with Shopify, WooCommerce, and Magento in under 15 minutes. Our AI is trained on 2.3 million historical support tickets from our customers (with consent). Competitors take 3-6 weeks to deploy; we take one day. This is our primary sales argument.
+
+We have no proprietary LLM. We use GPT-4o with a fine-tuned classification layer on top. Our defensibility comes from the integration speed, the ticket dataset, and the workflow automation layer (returns processing, refunds, shipping queries).
+
+MARKET
+
+E-commerce support software market: $8.2 billion globally in 2024, growing 14% YoY. We are targeting the 2.1 million Shopify merchants with $50K-$5M annual GMV — merchants large enough to have support problems but too small for enterprise solutions like Zendesk AI or Intercom.
+
+We estimate 180,000 merchants in our exact ICP. At $412/month average, total addressable market in our segment is $890M ARR.
+
+COMPETITIVE LANDSCAPE
+
+Direct competitors: Gorgias ($61M raised, focused on larger merchants), Tidio (freemium model, lower quality AI), Richpanel (similar positioning, slower deployment). No competitor has our deployment speed or autonomous resolution rate. We believe our 15-minute setup is a genuine differentiator.
+
+Indirect competition: hiring a support VA ($600-1,200/month), or doing nothing.
+
+FUNDRAISING STRATEGY
+
+We are raising $4M Series A targeting:
+- YC (applying Winter 2026)
+- Tier 2 funds focused on vertical AI: Gradient Ventures, Haystack, Rebel Fund
+- Shopify Ventures (strategic)
+
+Use of funds:
+- 40% engineering (2 senior engineers, 1 ML engineer)
+- 30% sales (2 AEs, SDR)
+- 20% infrastructure (GPU costs for inference are our largest COGS item)
+- 10% runway buffer
+
+We expect to reach $180K MRR in 12 months with this capital, implying a Series B raise at $2M ARR.
+
+WHY NOW
+
+GPT-4o brought autonomous resolution rates above the threshold where customers trust AI to handle real interactions. Before mid-2023, AI support tools required heavy human oversight. Now they don't. We are building in the 18-month window before large incumbents (Zendesk, Intercom) close the deployment gap.
+
+THE ASK
+
+$4M at a $16M pre-money valuation (4x ARR multiple on forward ARR of $564K). We believe this is a fair entry for a Seed-to-A bridge at our growth rate (5.8x ARR in 6 months).
+
+RISKS WE ARE AWARE OF
+
+1. Churn at 4.2% monthly is unsustainable long-term. We attribute this to onboarding gaps — merchants who don't fully integrate FlowDesk with their returns workflow churn within 90 days.
+
+2. OpenAI dependency: if OpenAI raises API prices or degrades quality, our unit economics break. We have no mitigation plan for this currently.
+
+3. Shopify concentration: 89% of our customers are on Shopify. If Shopify builds native AI support, we have a problem.

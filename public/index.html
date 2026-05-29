@@ -17,7 +17,11 @@
         <span class="logo-mark">◼</span>
         <span class="logo-text">UNSEEN</span>
       </div>
-      <div class="header-tagline">Adversarial Strategy Intelligence</div>
+      <nav class="header-nav">
+        <a href="#usecases">Use Cases</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#analyze" class="nav-cta">Run Analysis →</a>
+      </nav>
     </div>
   </header>
 
@@ -47,6 +51,102 @@
       <div class="agent-chip" style="--d: 0.3s">Blind Spot Detector</div>
       <div class="agent-chip" style="--d: 0.4s">Question Generator</div>
       <div class="agent-chip" style="--d: 0.5s">Insight Synthesizer</div>
+    </div>
+  </section>
+
+  <!-- USE CASES -->
+  <section class="usecases-section" id="usecases">
+    <div class="section-inner">
+      <div class="section-label">// WHEN TO USE UNSEEN</div>
+      <h2 class="section-title">Four moments that matter.</h2>
+      <div class="usecases-grid">
+        <div class="usecase-card">
+          <div class="usecase-icon">◈</div>
+          <div class="usecase-title">Pre-Fundraising</div>
+          <div class="usecase-freq">Once per raise</div>
+          <p class="usecase-desc">Adversarial review of your pitch deck before an investor meeting. Find the holes before they do.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">◈</div>
+          <div class="usecase-title">Board Meeting Prep</div>
+          <div class="usecase-freq">Quarterly</div>
+          <p class="usecase-desc">Anticipate director questions. Surface the risks your board will ask about before you're in the room.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">◈</div>
+          <div class="usecase-title">Strategy Pivot</div>
+          <div class="usecase-freq">Ad hoc</div>
+          <p class="usecase-desc">Test a new strategic direction before presenting it to your board or team. Stress-test the logic first.</p>
+        </div>
+        <div class="usecase-card">
+          <div class="usecase-icon">◈</div>
+          <div class="usecase-title">Key Hire Defense</div>
+          <div class="usecase-freq">Ad hoc</div>
+          <p class="usecase-desc">Prepare to defend a C-suite hire or major organizational decision before it goes to the board.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-inner">
+      <div class="section-label">// PRICING</div>
+      <h2 class="section-title">Pay for what you use.</h2>
+      <p class="pricing-sub">No subscriptions for tools you use once a quarter. Every tier includes the full 6-agent analysis and export.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-plan">Pay-as-you-go</div>
+          <div class="pricing-price">$49<span class="pricing-unit">/ report</span></div>
+          <div class="pricing-desc">One analysis, full report, export PDF. No commitment.</div>
+          <ul class="pricing-features">
+            <li>6-agent adversarial analysis</li>
+            <li>Bull + Bear case</li>
+            <li>Blind spot detection</li>
+            <li>5 unasked questions</li>
+            <li>Export-ready PDF briefing</li>
+          </ul>
+          <button class="btn-run" style="margin-top:1.5rem" onclick="scrollToAnalyze()">Start Analysis →</button>
+        </div>
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-plan">Active Raise</div>
+          <div class="pricing-price">$149<span class="pricing-unit">/ mo</span></div>
+          <div class="pricing-desc">Unlimited analyses during your fundraising period. Run it before every meeting.</div>
+          <ul class="pricing-features">
+            <li>Everything in Pay-as-you-go</li>
+            <li>Unlimited sessions</li>
+            <li>Investor-specific framing</li>
+            <li>Priority processing</li>
+          </ul>
+          <button class="btn-primary" style="margin-top:1.5rem;width:100%;justify-content:center" onclick="scrollToAnalyze()">Start Analysis →</button>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-plan">Between Rounds</div>
+          <div class="pricing-price">$49<span class="pricing-unit">/ mo</span></div>
+          <div class="pricing-desc">2 sessions per month for board prep and strategy reviews between fundraises.</div>
+          <ul class="pricing-features">
+            <li>2 analyses / month</li>
+            <li>Board Meeting Prep</li>
+            <li>Strategy Pivot reviews</li>
+            <li>PDF export included</li>
+          </ul>
+          <button class="btn-run" style="margin-top:1.5rem" onclick="scrollToAnalyze()">Start Analysis →</button>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-plan">Human Review</div>
+          <div class="pricing-price">$149<span class="pricing-unit">/ session</span></div>
+          <div class="pricing-desc">AI analysis plus 30-minute review with an experienced advisor. For high-stakes moments.</div>
+          <ul class="pricing-features">
+            <li>Full UNSEEN analysis</li>
+            <li>30-min advisor call</li>
+            <li>Annotated briefing</li>
+            <li>Follow-up Q&A</li>
+          </ul>
+          <button class="btn-run" style="margin-top:1.5rem" onclick="scrollToAnalyze()">Book Session →</button>
+        </div>
+      </div>
+      <p class="pricing-anchor">McKinsey charges $250K–$2M for what UNSEEN does in 15 minutes.</p>
     </div>
   </section>
 
@@ -102,6 +202,7 @@ Minimum 100 characters required."></textarea>
                 <option value="pivot_analysis">Pivot Analysis</option>
                 <option value="market_entry">Market Entry Analysis</option>
                 <option value="fundraising">Fundraising Strategy Review</option>
+                <option value="board_prep">Board Meeting Preparation</option>
               </select>
             </div>
           </div>
