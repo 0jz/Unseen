@@ -1,5 +1,7 @@
 # Unseen
 
+[![CI](https://github.com/0jz/Unseen/actions/workflows/ci.yml/badge.svg)](https://github.com/0jz/Unseen/actions/workflows/ci.yml)
+
 Six AI agents tear apart any strategy document and synthesize it into one executive briefing, for founders, advisors and boards who want the hard questions before the meeting, not during it.
 
 ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
